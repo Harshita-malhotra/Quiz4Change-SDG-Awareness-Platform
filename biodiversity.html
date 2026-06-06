@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biodiversity Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option:hover {
+            background-color: #f1f1f1;
+        }
+        .correct {
+            background-color: #c8e6c9;
+        }
+        .wrong {
+            background-color: #ffcccb;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+        }
+        .feedback {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .explanation {
+            font-size: 14px;
+            margin-top: 10px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        .correct {
+            color: green;
+        }
+        .wrong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Biodiversity Quiz</h1>
+        
+        <div id="quiz">
+            <!-- Question and Options will be injected here -->
+        </div>
+
+        <button onclick="submitQuiz()">Submit Quiz</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which of the following is the largest biodiversity hotspot in the world?",
+                options: [
+                    "The Amazon Rainforest",
+                    "The Congo Basin",
+                    "Sundaland",
+                    "The Himalayas"
+                ],
+                answer: 0,
+                explanation: "The Amazon Rainforest is the largest biodiversity hotspot in the world, hosting a wide variety of plant and animal species."
+            },
+            {
+                question: "What is the term used for the variety of different species of plants and animals in a particular area?",
+                options: [
+                    "Genetic Diversity",
+                    "Species Diversity",
+                    "Ecological Diversity",
+                    "Ecosystem Diversity"
+                ],
+                answer: 1,
+                explanation: "Species diversity refers to the variety of different species in a particular area, and is a critical component of biodiversity."
+            },
+            {
+                question: "Which of these practices is a major threat to biodiversity?",
+                options: [
+                    "Sustainable farming",
+                    "Habitat destruction",
+                    "Conservation programs",
+                    "Species protection"
+                ],
+                answer: 1,
+                explanation: "Habitat destruction, caused by deforestation and urbanization, is one of the biggest threats to biodiversity."
+            },
+            {
+                question: "What is the primary cause of the current mass extinction event?",
+                options: [
+                    "Climate change",
+                    "Invasive species",
+                    "Human activities",
+                    "Natural disasters"
+                ],
+                answer: 2,
+                explanation: "Human activities, such as deforestation, pollution, and overexploitation, are the main drivers of the current mass extinction event."
+            },
+            {
+                question: "Which international agreement aims to protect biodiversity and ensure its sustainable use?",
+                options: [
+                    "The Paris Agreement",
+                    "The Convention on Biological Diversity (CBD)",
+                    "The Montreal Protocol",
+                    "The Kyoto Protocol"
+                ],
+                answer: 1,
+                explanation: "The Convention on Biological Diversity (CBD) is an international treaty aimed at protecting biodiversity and promoting sustainable development."
+            },
+            {
+                question: "What is the main benefit of protecting biodiversity?",
+                options: [
+                    "Increase in economic profits",
+                    "Health benefits for humans",
+                    "Increase in carbon emissions",
+                    "More industrial growth"
+                ],
+                answer: 1,
+                explanation: "Protecting biodiversity helps maintain ecosystems that provide essential services like clean water, air, and food, contributing to human health and wellbeing."
+            },
+            {
+                question: "Which of the following is an example of an invasive species?",
+                options: [
+                    "European Starling in North America",
+                    "Bald Eagle in the United States",
+                    "Kangaroo in Australia",
+                    "Red Fox in Europe"
+                ],
+                answer: 0,
+                explanation: "The European Starling is an invasive species in North America, having been introduced from Europe and now displacing native bird species."
+            },
+            {
+                question: "Which ecosystem is known for having the highest biodiversity on Earth?",
+                options: [
+                    "Tundra",
+                    "Desert",
+                    "Coral reefs",
+                    "Temperate forests"
+                ],
+                answer: 2,
+                explanation: "Coral reefs are considered one of the most biologically diverse ecosystems on Earth, supporting a wide range of marine species."
+            },
+            {
+                question: "What is 'biodiversity loss'?",
+                options: [
+                    "The increase in number of species in an area",
+                    "The decline in species population and extinction of species",
+                    "The stabilization of ecosystems",
+                    "The growth of species in a specific area"
+                ],
+                answer: 1,
+                explanation: "Biodiversity loss refers to the decline in species populations, the reduction in genetic diversity, and the extinction of species."
+            },
+            {
+                question: "Which country has the largest number of bird species?",
+                options: [
+                    "Brazil",
+                    "Australia",
+                    "India",
+                    "United States"
+                ],
+                answer: 0,
+                explanation: "Brazil is home to the largest number of bird species, with its vast ecosystems like the Amazon Rainforest providing a wide range of habitats."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]]; // Swap elements
+            }
+        }
+
+        function loadQuestion() {
+            const questionData = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = `
+                <div class="question">${questionData.question}</div>
+                <div class="options">
+                    ${questionData.options.map((option, index) => {
+                        return `<div class="option" onclick="checkAnswer(${index}, ${currentQuestionIndex})">
+                                    <input type="radio" id="option${index}" name="question${currentQuestionIndex}" value="${index}" style="display:none">
+                                    <label for="option${index}">${option}</label>
+                                    <div class="explanation" id="explanation${index}" style="display:none;"></div>
+                                </div>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function checkAnswer(selectedIndex, questionIndex) {
+            const questionData = questions[questionIndex];
+            const optionDivs = document.querySelectorAll('.option');
+            const explanations = document.querySelectorAll('.explanation');
+
+            // Clear previous background colors
+            optionDivs.forEach(div => div.classList.remove('correct', 'wrong'));
+            explanations.forEach(explanation => explanation.style.display = "none");
+
+            // Mark correct or wrong answer
+            if (selectedIndex === questionData.answer) {
+                optionDivs[selectedIndex].classList.add('correct');
+                correctAnswers++;
+                document.getElementById(`explanation${selectedIndex}`).style.display = "block";
+                document.getElementById(`explanation${selectedIndex}`).innerHTML = `<strong>Correct:</strong> ${questionData.explanation}`;
+            } else {
+                optionDivs[selectedIndex].classList.add('wrong');
+                document.getElementById(`explanation${selectedIndex}`).style.display = "block";
+                document.getElementById(`explanation${selectedIndex}`).innerHTML = `<strong>Wrong:</strong> ${questionData.explanation}`;
+                document.getElementById(`explanation${questionData.answer}`).style.display = "block";
+                document.getElementById(`explanation${questionData.answer}`).innerHTML = `<strong>Correct:</strong> ${questionData.explanation}`;
+            }
+        }
+
+        function submitQuiz() {
+            document.getElementById("result").innerHTML = `You got ${correctAnswers} out of ${questions.length} correct!`;
+        }
+
+        shuffleQuestions();
+        loadQuestion();
+    </script>
+</body>
+</html>

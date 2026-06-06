@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: pink;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option:hover {
+            background-color: #f1f1f1;
+        }
+        .correct {
+            background-color: #c8e6c9;
+        }
+        .wrong {
+            background-color: #ffcccb;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+        }
+        .feedback {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .explanation {
+            font-size: 14px;
+            margin-top: 10px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        .correct {
+            color: green;
+        }
+        .wrong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Renewable Energy Quiz</h1>
+        
+        <div id="quiz">
+            
+        </div>
+
+        <button onclick="submitQuiz()">Submit Quiz</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the primary source of energy for solar power?",
+                options: [
+                    "Wind",
+                    "Sunlight",
+                    "Water",
+                    "Geothermal heat"
+                ],
+                answer: 1,
+                explanation: "Solar power generates energy from sunlight, using photovoltaic cells to convert sunlight into electricity."
+            },
+            {
+                question: "Which renewable energy source is most commonly used for generating electricity worldwide?",
+                options: [
+                    "Wind energy",
+                    "Hydropower",
+                    "Solar energy",
+                    "Geothermal energy"
+                ],
+                answer: 1,
+                explanation: "Hydropower is the largest source of renewable energy worldwide, utilizing flowing water to generate electricity."
+            },
+            {
+                question: "Which country generates the highest percentage of its electricity from renewable sources?",
+                options: [
+                    "Germany",
+                    "China",
+                    "Iceland",
+                    "United States"
+                ],
+                answer: 2,
+                explanation: "Iceland generates nearly 100% of its electricity from renewable sources, primarily geothermal and hydropower."
+            },
+            {
+                question: "What is the process of converting wind energy into electricity called?",
+                options: [
+                    "Wind farming",
+                    "Wind harnessing",
+                    "Wind harvesting",
+                    "Wind turbine generation"
+                ],
+                answer: 3,
+                explanation: "Wind energy is converted into electricity through the use of wind turbines, which harness the kinetic energy of the wind."
+            },
+            {
+                question: "Which of these is a disadvantage of solar energy?",
+                options: [
+                    "High operational costs",
+                    "Intermittency and dependence on sunlight",
+                    "Environmental damage",
+                    "No energy storage capability"
+                ],
+                answer: 1,
+                explanation: "One of the challenges of solar energy is its intermittency, as it is dependent on sunlight and cannot generate power during the night or on cloudy days."
+            },
+            {
+                question: "What type of renewable energy does geothermal power use?",
+                options: [
+                    "Heat from beneath the Earth’s surface",
+                    "Wind",
+                    "Water waves",
+                    "Solar radiation"
+                ],
+                answer: 0,
+                explanation: "Geothermal energy uses the heat from beneath the Earth's surface to generate electricity and provide heating."
+            },
+            {
+                question: "Which renewable energy source uses the kinetic energy of the ocean to generate electricity?",
+                options: [
+                    "Hydropower",
+                    "Ocean thermal energy",
+                    "Tidal energy",
+                    "Wave energy"
+                ],
+                answer: 2,
+                explanation: "Tidal energy utilizes the rise and fall of ocean tides to generate electricity."
+            },
+            {
+                question: "Which of the following is a non-renewable energy source?",
+                options: [
+                    "Solar power",
+                    "Natural gas",
+                    "Wind energy",
+                    "Hydropower"
+                ],
+                answer: 1,
+                explanation: "Natural gas is a non-renewable energy source, unlike solar, wind, and hydro, which are renewable."
+            },
+            {
+                question: "What is bioenergy derived from?",
+                options: [
+                    "Fossil fuels",
+                    "Nuclear reactions",
+                    "Organic materials",
+                    "Solar radiation"
+                ],
+                answer: 2,
+                explanation: "Bioenergy is derived from organic materials, such as plant and animal waste, which can be used to produce heat, electricity, and biofuels."
+            },
+            {
+                question: "What is a key benefit of using renewable energy over fossil fuels?",
+                options: [
+                    "It is more affordable",
+                    "It is sustainable and reduces carbon emissions",
+                    "It is more readily available",
+                    "It requires no infrastructure"
+                ],
+                answer: 1,
+                explanation: "Renewable energy is more sustainable and helps reduce carbon emissions, making it a cleaner option compared to fossil fuels."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]]; // Swap elements
+            }
+        }
+
+        function loadQuestion() {
+            const questionData = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = `
+                <div class="question">${questionData.question}</div>
+                <div class="options">
+                    ${questionData.options.map((option, index) => {
+                        return `<div class="option" onclick="checkAnswer(${index}, ${currentQuestionIndex})">
+                                    <input type="radio" id="option${index}" name="question${currentQuestionIndex}" value="${index}" style="display:none">
+                                    <label for="option${index}">${option}</label>
+                                    <div class="explanation" id="explanation${index}" style="display:none;"></div>
+                                </div>`; 
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function checkAnswer(selectedIndex, questionIndex) {
+            const questionData = questions[questionIndex];
+            const optionDivs = document.querySelectorAll('.option');
+            const explanations = document.querySelectorAll('.explanation');
+
+            
+            optionDivs.forEach(div => div.classList.remove('correct', 'wrong'));
+            explanations.forEach(explanation => explanation.style.display = "none");
+
+           
+            if (selectedIndex === questionData.answer) {
+                optionDivs[selectedIndex].classList.add('correct');
+                correctAnswers++;
+                document.getElementById(`explanation${selectedIndex}`).style.display = "block";
+                document.getElementById(`explanation${selectedIndex}`).innerHTML = `<strong>Correct:</strong> ${questionData.explanation}`;
+            } else {
+                optionDivs[selectedIndex].classList.add('wrong');
+                document.getElementById(`explanation${selectedIndex}`).style.display = "block";
+                document.getElementById(`explanation${selectedIndex}`).innerHTML = `<strong>Wrong:</strong> ${questionData.explanation}`;
+                document.getElementById(`explanation${questionData.answer}`).style.display = "block";
+                document.getElementById(`explanation${questionData.answer}`).innerHTML = `<strong>Correct:</strong> ${questionData.explanation}`;
+            }
+
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }
+            }, 2000);
+        }
+
+        function submitQuiz() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `You scored ${correctAnswers} out of ${questions.length}!`;
+        }
+
+        window.onload = function () {
+            shuffleQuestions();
+            loadQuestion();
+        };
+    </script>
+
+</body>
+</html>

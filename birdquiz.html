@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birds and Their Importance Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option:hover {
+            background-color: #f1f1f1;
+        }
+        .correct {
+            background-color: #c8e6c9; /* Green for correct answer */
+        }
+        .wrong {
+            background-color: #ffcccb; /* Red for wrong answer */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+        }
+        .feedback {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .explanation {
+            font-size: 14px;
+            margin-top: 10px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        .correct {
+            color: green;
+        }
+        .wrong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Birds and Their Importance Quiz</h1>
+        
+        <div id="quiz">
+            <!-- Question and Options will be injected here -->
+        </div>
+
+        <button onclick="submitQuiz()">Submit Quiz</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the primary role of birds in ecosystems?",
+                options: [
+                    "Pollination and seed dispersal",
+                    "Consuming waste products",
+                    "Producing oxygen",
+                    "Absorbing carbon dioxide"
+                ],
+                answer: 0,
+                explanation: "Birds play an essential role in pollination, seed dispersal, and controlling pest populations, maintaining ecological balance."
+            },
+            {
+                question: "Which bird is often referred to as the 'farmer's friend' due to its pest control abilities?",
+                options: [
+                    "Crow",
+                    "Barn Owl",
+                    "Peacock",
+                    "Flamingo"
+                ],
+                answer: 1,
+                explanation: "Barn Owls are known as 'farmer's friends' because they prey on rodents, reducing crop damage."
+            },
+            {
+                question: "What role do vultures play in the ecosystem?",
+                options: [
+                    "Pollination",
+                    "Decomposition",
+                    "Predation",
+                    "Seed dispersal"
+                ],
+                answer: 1,
+                explanation: "Vultures help in decomposition by consuming animal carcasses, preventing the spread of diseases."
+            },
+            {
+                question: "Why are migratory birds important indicators of environmental health?",
+                options: [
+                    "They help in pest control",
+                    "They indicate the health of ecosystems across their migration routes",
+                    "They assist in pollination",
+                    "They increase biodiversity"
+                ],
+                answer: 1,
+                explanation: "Migratory birds indicate environmental health because they depend on diverse, healthy ecosystems during their journeys."
+            },
+            {
+                question: "Which bird species is known for its role in pollination?",
+                options: [
+                    "Hummingbird",
+                    "Penguin",
+                    "Ostrich",
+                    "Hawk"
+                ],
+                answer: 0,
+                explanation: "Hummingbirds play a crucial role in pollination, especially for plants with tubular flowers."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        // Shuffle the questions array randomly
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]]; // Swap elements
+            }
+        }
+
+        function loadQuestion() {
+            const questionData = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = `
+                <div class="question">${questionData.question}</div>
+                <div class="options">
+                    ${questionData.options.map((option, index) => {
+                        return `<div class="option" onclick="checkAnswer(${index}, ${currentQuestionIndex})">
+                                    <input type="radio" id="option${index}" name="question${currentQuestionIndex}" value="${index}" style="display:none">
+                                    <label for="option${index}">${option}</label>
+                                    <div class="explanation" id="explanation${index}" style="display:none;"></div>
+                                </div>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function checkAnswer(selectedIndex, questionIndex) {
+            const questionData = questions[questionIndex];
+            const optionDivs = document.querySelectorAll('.option');
+            const explanations = document.querySelectorAll('.explanation');
+
+            // Clear previous background colors
+            optionDivs.forEach(div => div.classList.remove('correct', 'wrong'));
+            explanations.forEach(explanation => explanation.style.display = "none");
+
+            // Mark correct or wrong answer
+            if (selectedIndex === questionData.answer) {
+                optionDivs[selectedIndex].classList.add('correct');
+                correctAnswers++;
+                document.getElementById(`explanation${selectedIndex}`).style.display = "block";
+                document.getElementById(`explanation${selectedIndex}`).innerHTML = `<strong>Correct:</strong> ${questionData.explanation}`;
+            } else {
+                optionDivs[selectedIndex].classList.add('wrong');
+                document.getElementById(`explanation${selectedIndex}`).style.display = "block";
+                document.getElementById(`explanation${selectedIndex}`).innerHTML = `<strong>Wrong:</strong> ${questionData.explanation}`;
+                document.getElementById(`explanation${questionData.answer}`).style.display = "block";
+                document.getElementById(`explanation${questionData.answer}`).innerHTML = `<strong>Correct:</strong> ${questionData.explanation}`;
+            }
+
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }
+            }, 2000);
+        }
+
+        function submitQuiz() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `You scored ${correctAnswers} out of ${questions.length}!`;
+        }
+
+        window.onload = function () {
+            shuffleQuestions();
+            loadQuestion();
+        };
+    </script>
+
+</body>
+</html>
